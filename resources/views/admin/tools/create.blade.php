@@ -1,0 +1,56 @@
+@extends('app')
+
+@section('content')
+<div class="card shadow-sm">
+    <div class="card-body p-4">
+
+        <div class="d-flex justify-content-start mb-3">
+            <a href="{{ route('tools.index') }}" class="btn btn-warning">
+                <i class='fa-solid fa-arrow-left'></i> Back
+            </a>
+        </div>
+
+        <h3 class="text-center mb-4">Create Tool</h3>
+
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        <form action="{{ route('tools.store') }}" method="POST">
+            @csrf
+
+            <div class="mb-3">
+                <label class="form-label">Tool Name</label>
+                <input type="text" name="name_tools" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Stock</label>
+                <input type="number" name="stock" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Category</label>
+                <select class="form-select @error('category_id') is-invalid @enderror" name="category_id" required>
+                    <option value="" selected disabled>-- Select Category --</option>
+                    @forelse($category as $c)
+                        <option value="{{ $c->id }}">{{ $c->nama_kategori }}</option>
+                    @empty
+                        <option disabled> No categories available. Please create one first! </option>
+                    @endforelse
+                </select>
+                @error('category_id')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">
+                    <i class='fa-solid fa-plus'></i> Create
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+@endsection

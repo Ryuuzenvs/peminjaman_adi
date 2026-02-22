@@ -1,0 +1,85 @@
+@extends('app')
+
+@section('content')
+<h3 class="mb-3">Loans Manegement</h3>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-bordered table-hover align-middle bg-white">
+            <thead class="table-light">
+                <tr>
+                    <th class="text-start">Borrower</th>
+                    <th class="text-start">Tool</th>
+                    <th class="text-end">Loan date</th>
+                    <th class="text-end">Deadline</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach ($loans as $l)
+                <tr>
+                    <td class="text-start fw-semibold">
+                        {{ $l->borrower->username }}
+                    </td>
+
+                    <td class="text-start">
+                        {{ $l->tool->name_tools ?? 'Alat Dihapus' }}
+                    </td>
+
+                    <td class="text-end text-muted">
+                        {{ $l->created_at->format('d M Y H:i:s') }}
+                    </td>
+
+                    <td class="text-end">
+                        {{ $l->loan_date ? \Carbon\Carbon::parse($l->created_at)->addDays(3)->format('d M Y H:i:s') : '-' }}
+                    </td>
+
+                    <td class="text-center">
+                        <span class="badge 
+                            {{ $l->status == 'pending' ? 'bg-warning text-dark' : 
+                               ($l->status == 'borrow' ? 'bg-info text-dark' : 'bg-success') }}">
+                            {{ ucfirst($l->status) }}
+                        </span>
+                    </td>
+
+                    <td class="text-end">
+                        @if ($l->status == 'pending')
+                            <form action="{{ route('loans.approve', $l->id) }}" method="POST" class="d-inline">
+                                @csrf @method('PUT')
+                                <button class="btn btn-sm btn-primary">
+                                    Approve
+                                </button>
+                            </form>
+
+                        @elseif($l->status == 'borrow')
+                            <form action="{{ route('loans.return', $l->id) }}" method="POST" class="d-inline">
+                                @csrf @method('PUT')
+                                <button class="btn btn-sm btn-success">
+                                    Terima Kembali
+                                </button>
+                            </form>
+
+                        @else
+                            <span class="text-muted small">
+                                Return <br>
+                                Rp {{ number_format($l->penalty, 0, ',', '.') }}
+                            </span>
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="mt-4">
+<a href="{{ route('users.create') }}" class="btn btn-primary">
+                <i class='fa-solid fa-plus'></i> Create user
+            </a>
+<a href="{{ route('officer.report') }}" class="btn btn-primary">
+   Print Report
+</a>
+</div>
+@endsection
