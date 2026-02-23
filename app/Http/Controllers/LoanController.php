@@ -175,9 +175,7 @@ public function peminjamCreate() {
         try {
             // conf
             $loan = loan::findOrFail($id);
-
             $user = Auth::user();
-
             $tool = tool::findOrFail($loan->tool_id);
 
             // car loan obj - loandate
@@ -192,8 +190,10 @@ public function peminjamCreate() {
             // if($selisih > 3) {
             //     $denda = ($selisih - 3) *  1000;
             // }
-            $result = DB::select("SELECT hitung_denda(?, ?) as total_denda", [
-                $loan->loan_date,
+            $result = DB::select("SELECT hitung_denda(?, ?, ? , ?) as total_denda", [
+                $loan->tool_id,
+                $loan->qty,
+                $loan->due_date,
                 $returndate
             ]);
             $denda = $result[0]->total_denda;
@@ -214,14 +214,11 @@ public function peminjamCreate() {
             ]);
             DB::commit();
             return back()->with('success', 'Berhasil return alat!');
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             // rb m ge tmsg
             DB::rollback();
             // dd($e->getMessage());
-            return back()->with(
-                'error',
-                // ->getMessage()
-            );
+            return back()->with('error', $e->getMessage());
         }
     }
 

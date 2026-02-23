@@ -2,7 +2,12 @@
 
 @section('content')
 <h3 class="mb-3">Loans Manegement</h3>
-
+@if (session('success'))
+                    <div class="alert alert-success py-2">{{ session('success') }}</div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger py-2">{{ session('error') }}</div>
+                @endif
 <div class="card shadow-sm">
     <div class="card-body">
         <table class="table table-bordered table-hover align-middle bg-white">
@@ -11,8 +16,8 @@
                     <th class="text-start">Borrower</th>
                     <th class="text-start">Tool</th>
                     <th class="text-center">Status</th>
+                    <th class="text-end">qty</th>
                     <th class="text-end">Loan date</th>
-                    <th class="text-end">Qty</th>
                     <th class="text-end">Deadline</th>
                     <th class="text-end">Action</th>
                 </tr>
@@ -39,12 +44,12 @@
                         </span>
                     </td>
 
-                    <td class="text-end text-muted">
-                        {{ $l->created_at->format('d M Y H:i:s') }}
+                    <td class="text-end">
+                        {{ $l->qty}}
                     </td>
 
                     <td class="text-end">
-                        {{ $l->qty}}
+                        {{ $l->loan_date }}
                     </td>
 
                     <td class="text-end">
