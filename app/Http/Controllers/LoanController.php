@@ -63,7 +63,7 @@ public function peminjamCreate() {
     // Cek kolom nama/kelas di tabel borrowers sudah terisi
     if (!$user->borrower || empty($user->borrower->name) || empty($user->borrower->class)) {
         return redirect()->route('profile.show', $user->id)
-            ->with('info', 'Eitss! Isi dulu Nama Lengkap dan Kelas kamu di sini sebelum pinjam alat ya.');
+            ->with('info', 'please complete your detail acccount.');
     }
 
     $tools = tool::where('stock', '>', 0)->get();
