@@ -61,10 +61,10 @@ public function loans()
     return $this->hasMany(loan::class, 'borrower_id');
 }
 
-public function profile()
+public function borrower()
 {
     // has one 
-    return $this->hasOne(BorrowerProfile::class);
+    return $this->hasOne(Borrower::class);
 }
 
 }

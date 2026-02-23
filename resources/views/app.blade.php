@@ -26,10 +26,13 @@
                     <a class="nav-link" href="{{ route('admin.loans.index') }}">Loan</a>
                     <a class="nav-link" href="{{ route('admin.logs.index') }}">Logs</a>
                 @elseif($user && $user->role === 'officer')
+                    <a class="nav-link" href="{{ route('users.create') }}">Regis</a>
                     <a class="nav-link" href="{{ route('officer.dashboard') }}">Manegement</a>
                     <a class="nav-link" href="{{ route('officer.report') }}">Report</a>
                 @elseif($user && $user->role === 'borrower')
                     <a class="nav-link" href="{{ route('borrower.dashboard') }}">My Loans</a>
+                    <a class="nav-link" href="{{ route('profile.show', auth()->id()) }}">My Profile</a>
+
                     <a class="nav-link" href="{{ route('borrower.pinjam') }}">Get Loans</a>
                     <a class="nav-link" href="{{ route('borrower.history') }}">Get Return</a>
                 @endif

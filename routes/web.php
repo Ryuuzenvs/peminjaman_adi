@@ -14,6 +14,7 @@ Route::post('/login', [authController::class, 'login']) -> name('login.post');
 Route::post('/logout', [authController::class, 'logout']) -> name('logout');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/{id}', [UserController::class, 'showProfile'])->name('profile.show');
 
     // cek role in contr 
     Route::put('/loans/return/{id}', [LoanController::class, 'returnTool'])->name('loans.return');
@@ -68,7 +69,7 @@ Route::middleware(['auth', 'role:borrower'])->group(function () {
     // Menu 3: Riwayat Pengembalian
     Route::get('/borrower/history', [LoanController::class, 'peminjamHistory'])->name('borrower.history');
 
-    // Action Gimmick
+    Route::put('/profile/{id}/update', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::put('/loans/request-return/{id}', [LoanController::class, 'requestReturn'])->name('loans.requestReturn');
 });
 

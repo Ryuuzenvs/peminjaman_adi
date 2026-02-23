@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Borrower;
 
 class UserController extends Controller
 {
@@ -153,5 +154,49 @@ class UserController extends Controller
     $user->delete();
     
     return back()->with('success', 'User berhasil dihapus');
+}
+
+public function showProfile($id)
+{
+    $user = User::with('Borrower')->findOrFail($id);
+    
+    // Logic View : it own
+    $isOwner = (auth()->id() == $id);
+    
+    // role up view logic
+    $isStaff = in_array(auth()->user()->role, ['admin', 'officer']);
+
+    // protec
+    if (!$isOwner && !$isStaff) {
+        return redirect()->back()->with('error', 'error cannt view another profile except you.');
+    }
+
+    return view('profile.show', compact('user', 'isOwner', 'isStaff'));
+}
+
+public function updateProfile(Request $request, $id)
+{
+    // protec
+    if (auth()->id() != $id) {
+        abort(403, 'Unauthorized action.');
+    }
+
+//valid
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'class' => 'required|string|max:50',
+    ]);
+
+    
+    // updateOrCreate   
+    Borrower::updateOrCreate(
+        ['user_id' => $id], // for key
+        [
+            'name' => $request->name,
+            'class' => $request->class
+        ] 
+    );
+
+    return redirect()->back()->with('success', 'Profile updated successfully! Sekarang kamu bisa meminjam alat.');
 }
 }

@@ -58,6 +58,14 @@ public function peminjamHistory() {
     return view('peminjam.return', compact('history'));
 }
 public function peminjamCreate() {
+    $user = Auth::user();
+    
+    // Cek kolom nama/kelas di tabel borrowers sudah terisi
+    if (!$user->borrower || empty($user->borrower->name) || empty($user->borrower->class)) {
+        return redirect()->route('profile.show', $user->id)
+            ->with('info', 'Eitss! Isi dulu Nama Lengkap dan Kelas kamu di sini sebelum pinjam alat ya.');
+    }
+
     $tools = tool::where('stock', '>', 0)->get();
     return view('peminjam.loan', compact('tools'));
 }

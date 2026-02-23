@@ -10,6 +10,7 @@ class Borrower extends Model
 protected $fillable = [
         'name',
         'class',
+        'user_id'
     ];
 
 public function user()

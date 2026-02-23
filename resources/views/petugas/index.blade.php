@@ -21,7 +21,9 @@
                 @foreach ($loans as $l)
                 <tr>
                     <td class="text-start fw-semibold">
-                        {{ $l->borrower->username }}
+                        <a href="{{ route('profile.show', $l->borrower->id) }}" class="text-decoration-none">
+                        <i class="fas fa-user-circle"></i> {{ $l->borrower->username }}
+                    </a>
                     </td>
 
                     <td class="text-start">
