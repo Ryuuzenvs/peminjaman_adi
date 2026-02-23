@@ -29,6 +29,10 @@
                 <label class="form-label">Stock</label>
                 <input type="number" name="stock" class="form-control" value="{{ $tools->stock }}" required>
             </div>
+<div class="mb-3">
+                <label class="form-label">price</label>
+                <input type="number" name="price" class="form-control" value="{{ $tools->price }}" required>
+            </div>
 
             <div class="mb-3">
                 <label class="form-label">Category</label>

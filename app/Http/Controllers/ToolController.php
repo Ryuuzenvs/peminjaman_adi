@@ -42,6 +42,7 @@ class ToolController extends Controller
             'name_tools' => 'required',
             'stock' => 'required|numeric',
             'category_id' => 'required',
+             'price' => 'required'
         ]);
         //get app mod tool, create var
         tool::create($data);
@@ -77,6 +78,7 @@ class ToolController extends Controller
             'name_tools' => 'required',
             'stock' => 'required|numeric',
             'category_id' => 'required',
+             'price' => 'required'
         ]);
         //conf
         $find = tool::findOrFail($id);

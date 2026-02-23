@@ -21,6 +21,7 @@
                     <th class="text-start">Tool Name</th>
                     <th class="text-start">Category</th>
                     <th class="text-end">Stock</th>
+                    <th class="text-end">price</th>
                     <th class="text-end">Actions</th>
                 </tr>
             </thead>
@@ -30,6 +31,7 @@
                     <td class="text-start">{{ $t->name_tools }}</td>
                     <td class="text-start">{{ $t->category->nama_kategori ?? '-' }}</td>
                     <td class="text-end">{{ $t->stock }}</td>
+                    <td class="text-end">{{ $t->price }}</td>
                     <td class="text-end">
                         <form method="POST" action="{{ route('tools.destroy', $t->id) }}" class="d-inline">
                             @csrf
