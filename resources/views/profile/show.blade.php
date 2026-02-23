@@ -10,6 +10,12 @@
                     <span class="badge bg-light text-primary text-uppercase">{{ $user->role }}</span>
                 </div>
                 <div class="card-body p-4">
+@if (session('success'))
+                    <div class="alert alert-success py-2">{{ session('success') }}</div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger py-2">{{ session('error') }}</div>
+                @endif
                     
                     @if(session('info'))
                         <div class="alert alert-info border-0 shadow-sm">

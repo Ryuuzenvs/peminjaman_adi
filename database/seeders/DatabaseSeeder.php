@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         tool::insert([
-            ['name_tools' => 'pena', 'category_id' => 1, 'stock' => 10, 'created_at' => now()],
-            ['name_tools' => 'bola basket', 'category_id' => 2, 'stock' => 10, 'created_at' => now()],
-            ['name_tools' => 'lap', 'category_id' => 3, 'stock' => 10, 'created_at' => now()],
+            ['name_tools' => 'pena', 'category_id' => 1, 'stock' => 10, 'created_at' => now(), 'price' => 1000],
+            ['name_tools' => 'bola basket', 'category_id' => 2, 'stock' => 10, 'created_at' => now(),'price' => 2000],
+            ['name_tools' => 'lap', 'category_id' => 3, 'stock' => 10, 'created_at' => now(),'price' => 3000],
         ]);
     }
 }
