@@ -41,7 +41,7 @@ class LoanController extends Controller
     $borrowerId = Auth::id();
     // Ambil yang statusnya 'pending' atau 'borrow'
     $myloan = loan::where('borrower_id', $borrowerId)
-                ->whereIn('status', ['pending', 'borrow'])
+                ->whereIn('status', ['pending', 'borrow', 'return'])
                 ->with('tool')
                 ->latest()
                 ->get();

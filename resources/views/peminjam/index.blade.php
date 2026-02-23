@@ -2,6 +2,14 @@
 @section('content')
 <div class="container mt-4">
     <div class="row mb-4">
+<div class="col-md-4">
+            <div class="card bg-warning text-white shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small fw-bold">Total Transaksi Aktif</h6>
+                    <h2 class="mb-0">{{ $myloan->where('status', 'return')->sum('penalty') }}</h2>
+                </div>
+            </div>
+        </div>
         <div class="col-md-4">
             <div class="card bg-primary text-white shadow-sm border-0">
                 <div class="card-body">
@@ -38,7 +46,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($myloan as $loan)
+                    @forelse($myloan->where('status', '!=', 'return') as $loan)
                         <tr>
                             <td>
                                 <div class="fw-bold">{{ $loan->tool->name_tools }}</div>
@@ -117,7 +125,7 @@
                         <td class="text-center">{{ $no++ }}</td>
                         <td class="fw-bold">{{ $loans->first()->tool->name_tools }}</td>
                         <td class="text-center">
-                            <span class="badge border text-dark">{{ $loans->first()->tool->category->name ?? 'Umum' }}</span>
+                            <span class="badge border text-dark">{{ $loans->first()->tool->category->nama_kategori ?? 'Umum' }}</span>
                         </td>
                         <td class="text-center">
                             <span class="h5 mb-0 text-primary">{{ $loans->sum('qty') }}</span> Pcs
