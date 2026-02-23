@@ -80,12 +80,12 @@ return new class extends Migration
             DECLARE v_approver VARCHAR(255);
             
             -- Ambil info untuk log
-            SELECT name INTO v_username FROM users WHERE id = NEW.borrower_id;
+            SELECT username INTO v_username FROM users WHERE id = NEW.borrower_id;
             SELECT name_tools INTO v_toolname FROM tools WHERE id = NEW.tool_id;
 
             -- LOGIC: STATUS BERUBAH JADI 'BORROW' (APPROVE)
             IF OLD.status = 'pending' AND NEW.status = 'borrow' THEN
-                SELECT name INTO v_approver FROM users WHERE id = NEW.approved_by;
+                SELECT username INTO v_approver FROM users WHERE id = NEW.approved_by;
                 
                 -- Update Stok (Kurangi)
                 UPDATE tools SET stock = stock - NEW.qty WHERE id = NEW.tool_id;

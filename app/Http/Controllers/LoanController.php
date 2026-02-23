@@ -90,38 +90,36 @@ public function peminjamCreate() {
         DB::beginTransaction();
         // try the case
         try {
-            // get tool id
             $tool = tool::findOrFail($request->tool_id);
+            $qtyInput = $request->qty ?? 1;
+            if ($tool->stock < $qtyInput) {
+            return back()->with('error', 'Stok tidak mencukupi! Sisa stok: ' . $tool->stock);
+        }
+            // get tool id
+
             // ret
             if ($tool->stock <= 0) return back()->with('error', 'Stok habis!');
 
             // logic get ID n usn
-            if ($request->has('user_id')) {
-                //  admin input
-                $borrower = User::findOrFail($request->user_id);
-                $borrowerId = $borrower->id;
-                // $borrowerName = $borrower->username;
-            } else {
-                // borrower login 
-                $user = $user = Auth::user();
-                $borrowerId = $user->id;
-                // $borrowerName = $user->username;
-            }
+            $borrowerId = $request->has('user_id') ? $request->user_id : Auth::id();
 
             // tool->decr(stock )
             //$tool->decrement('stock');
-
+            $dueDate = Carbon::now()->addDays(1);
             //create loan([loan row])
             // $loan = 
             loan::create([
                 //if thres no usr_id, get aut id
                 'borrower_id' => $borrowerId,
                 'tool_id' => $tool->id,
-                'loan_date' => now()
+                'due_date'    => $dueDate, // SOLUSI ERROR TADI
+                'qty'         => $qtyInput, // Menangani multistock
+                'status'      => 'pending',
+                'loan_date' => Carbon::now()
             ]);
 
             // LOGGING
-            /*
+            /* Catatan: Stok JANGAN dikurangi di sini (store),
         ActivityLog::create([
             'data' => "[PINJAM] $borrowerName meminjam alat: $tool->name_tools (ID Pinjam: $loan->id)"
         ]);
@@ -144,10 +142,14 @@ public function peminjamCreate() {
         // conf
         $loan = loan::with('borrower', 'tool')->findOrFail($id);
         //loan > upd =([ status boro, admin id =>  id()])
-
+            $tool = tool::findOrFail($loan->tool_id);
         // login, Cek guard
         $approver = Auth::user();
 
+//cond
+        if ($tool->stock < $loan->qty) {
+        return back()->with('error', 'Stok alat sudah tidak mencukupi untuk disetujui.');
+    }
         // res
         $loan->update([
             'status' => 'borrow',
@@ -204,7 +206,7 @@ public function peminjamCreate() {
             ]);
 
             // res 1
-            $tool->increment('stock');
+            //$tool->increment('stock');
 
             // comm
             DB::statement("CALL sp_log_activity(?)", [
@@ -281,11 +283,11 @@ public function peminjamCreate() {
         // conf
         $loan = loan::findOrFail($id);
         // condition - stock, stock++
-        if ($loan->status != 'return') {
-            // inc
-            tool::where('id', $loan->tool_id)->increment('stock');
-        }
-
+//        if ($loan->status != 'return') {
+//            // inc
+//            tool::where('id', $loan->tool_id)->increment('stock');
+//        }
+//
         // res
         $loan->delete();
         return back()->with('success', 'Data transaksi dihapus & stok disesuaikan.');

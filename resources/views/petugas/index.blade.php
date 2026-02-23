@@ -10,9 +10,10 @@
                 <tr>
                     <th class="text-start">Borrower</th>
                     <th class="text-start">Tool</th>
-                    <th class="text-end">Loan date</th>
-                    <th class="text-end">Deadline</th>
                     <th class="text-center">Status</th>
+                    <th class="text-end">Loan date</th>
+                    <th class="text-end">Qty</th>
+                    <th class="text-end">Deadline</th>
                     <th class="text-end">Action</th>
                 </tr>
             </thead>
@@ -30,14 +31,6 @@
                         {{ $l->tool->name_tools ?? 'Alat Dihapus' }}
                     </td>
 
-                    <td class="text-end text-muted">
-                        {{ $l->created_at->format('d M Y H:i:s') }}
-                    </td>
-
-                    <td class="text-end">
-                        {{ $l->loan_date ? \Carbon\Carbon::parse($l->created_at)->addDays(3)->format('d M Y H:i:s') : '-' }}
-                    </td>
-
                     <td class="text-center">
                         <span class="badge 
                             {{ $l->status == 'pending' ? 'bg-warning text-dark' : 
@@ -45,6 +38,19 @@
                             {{ ucfirst($l->status) }}
                         </span>
                     </td>
+
+                    <td class="text-end text-muted">
+                        {{ $l->created_at->format('d M Y H:i:s') }}
+                    </td>
+
+                    <td class="text-end">
+                        {{ $l->qty}}
+                    </td>
+
+                    <td class="text-end">
+                        {{ $l->due_date}}
+                    </td>
+
 
                     <td class="text-end">
                         @if ($l->status == 'pending')

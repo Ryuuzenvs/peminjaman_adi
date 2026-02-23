@@ -3,6 +3,12 @@
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">Get loan</div>
         <div class="card-body">
+@if (session('success'))
+                    <div class="alert alert-success py-2">{{ session('success') }}</div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger py-2">{{ session('error') }}</div>
+                @endif
             <div class="row">
                 @foreach ($tools as $t)
                     <div class="col-md-4 mb-3">
@@ -31,6 +37,10 @@
                                                 <div class="modal-body text-center">
                                                     <p>Yakin ingin meminjam alat:</p>
                                                     <h5 class="fw-bold">{{ $t->name_tools }}</h5>
+                                                    <div class="mt-3 px-5">
+                                                    <label class="form-label">Jumlah Pinjam (Qty):</label>
+                                                        <input type="number" name="qty" class="form-control text-center" value="1"  min="1" max="{{ $t->stock }}" required>
+                                                    </div>
                                                 </div>
 
                                                 <div class="modal-footer">
